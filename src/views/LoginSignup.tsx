@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { ShieldCheck, Mail, Lock, UserPlus, LogIn } from 'lucide-react';
+import { BubblesBackground } from '../components/BubblesBackground';
+import { ShieldCheck, Mail, Lock, UserPlus, LogIn, ArrowLeft } from 'lucide-react';
 
-export const LoginSignup: React.FC = () => {
+interface LoginSignupProps {
+  onBack?: () => void;
+}
+
+export const LoginSignup: React.FC<LoginSignupProps> = ({ onBack }) => {
   const { login, signup } = useApp();
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState('');
@@ -84,9 +89,21 @@ export const LoginSignup: React.FC = () => {
 
   return (
     <div style={styles.page}>
+      {/* Floating Bubbles Background for continuous aesthetics */}
+      <BubblesBackground />
+
       <div style={styles.backgroundGlow} />
 
-      <div className="glass-panel" style={styles.container}>
+      {/* Main Auth Container */}
+      <div className="glass-panel animate-fade-in" style={styles.container}>
+        
+        {/* Back Button */}
+        {onBack && (
+          <button onClick={onBack} style={styles.backBtn} className="btn-secondary">
+            <ArrowLeft size={14} /> Back
+          </button>
+        )}
+
         {/* Brand Header */}
         <div style={styles.brand}>
           <div style={styles.logoIcon}>AF</div>
@@ -100,13 +117,13 @@ export const LoginSignup: React.FC = () => {
             style={styles.tabBtn(isLogin)} 
             onClick={() => { setIsLogin(true); setError(''); setSuccess(''); }}
           >
-            <LogIn size={16} /> Sign In
+            <LogIn size={15} /> Sign In
           </button>
           <button 
             style={styles.tabBtn(!isLogin)} 
             onClick={() => { setIsLogin(false); setError(''); setSuccess(''); }}
           >
-            <UserPlus size={16} /> Register
+            <UserPlus size={15} /> Register
           </button>
         </div>
 
@@ -123,14 +140,14 @@ export const LoginSignup: React.FC = () => {
           </div>
         )}
 
-        {/* Message Banner */}
-        {error && <div style={styles.errorBanner}>{error}</div>}
-        {success && <div style={styles.successBanner}>{success}</div>}
+        {/* Message Banners with Slide-in Animation */}
+        {error && <div className="animate-fade-in" style={styles.errorBanner}>{error}</div>}
+        {success && <div className="animate-fade-in" style={styles.successBanner}>{success}</div>}
 
         {/* Authentication Form */}
         <form onSubmit={handleSubmit} style={styles.form}>
           {!isLogin && (
-            <div className="form-group">
+            <div className="form-group animate-fade-in">
               <label>Full Name</label>
               <div style={styles.inputWrapper}>
                 <ShieldCheck style={styles.inputIcon} size={18} />
@@ -168,7 +185,7 @@ export const LoginSignup: React.FC = () => {
                 <button 
                   type="button" 
                   onClick={handleForgotPassword}
-                  style={{ background: 'none', border: 'none', color: 'hsl(var(--primary))', fontSize: '0.75rem', cursor: 'pointer', fontFamily: 'var(--font-secondary)', padding: 0 }}
+                  style={styles.forgotBtn}
                 >
                   Forgot Password?
                 </button>
@@ -218,60 +235,81 @@ const styles = {
     background: 'var(--bg-primary)',
     position: 'relative' as const,
     overflow: 'hidden',
-    padding: '2rem'
+    padding: '2rem',
+    transition: 'background-color var(--transition-normal)'
   },
   backgroundGlow: {
     position: 'absolute' as const,
-    width: '400px',
-    height: '400px',
+    width: '450px',
+    height: '450px',
     borderRadius: '50%',
     background: 'radial-gradient(circle, var(--primary-glow) 0%, rgba(99, 102, 241, 0) 70%)',
-    top: '20%',
-    left: '30%',
-    filter: 'blur(40px)',
-    pointerEvents: 'none' as const
+    top: '15%',
+    left: '25%',
+    filter: 'blur(50px)',
+    pointerEvents: 'none' as const,
+    zIndex: 0
   },
   container: {
     width: '100%',
-    maxWidth: '420px',
-    padding: '2.5rem 2rem',
+    maxWidth: '430px',
+    padding: '2.5rem 2.25rem',
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: '1.5rem',
+    gap: '1.25rem',
     position: 'relative' as const,
     zIndex: 2,
-    backgroundColor: 'var(--card-bg)'
+    backgroundColor: 'var(--card-bg)',
+    boxShadow: 'var(--shadow-lg)'
+  },
+  backBtn: {
+    alignSelf: 'flex-start',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.4rem',
+    background: 'none',
+    color: 'var(--text-secondary)',
+    cursor: 'pointer',
+    fontSize: '0.8rem',
+    fontWeight: 600,
+    padding: '0.4rem 0.6rem',
+    borderRadius: '8px',
+    border: '1px solid var(--card-border)',
+    backgroundColor: 'var(--bg-tertiary)',
+    transition: 'all var(--transition-fast)'
   },
   brand: {
     textAlign: 'center' as const,
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
-    gap: '0.5rem'
+    gap: '0.4rem',
+    marginTop: '0.25rem'
   },
   logoIcon: {
-    width: '48px',
-    height: '48px',
-    borderRadius: '12px',
-    backgroundColor: 'hsl(var(--primary))',
+    width: '44px',
+    height: '44px',
+    borderRadius: '11px',
+    background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--purple)) 100%)',
     color: '#ffffff',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: 800,
-    fontSize: '1.25rem',
-    boxShadow: '0 4px 15px var(--primary-glow)'
+    fontSize: '1.2rem',
+    boxShadow: '0 4px 12px var(--primary-glow)'
   },
   brandTitle: {
-    fontSize: '1.8rem',
+    fontSize: '1.75rem',
     fontWeight: 800,
     color: 'var(--text-primary)',
-    letterSpacing: '-0.03em'
+    letterSpacing: '-0.02em'
   },
   brandSubtitle: {
     fontSize: '0.8rem',
     color: 'var(--text-secondary)',
-    fontWeight: 500
+    fontWeight: 500,
+    lineHeight: 1.3
   },
   tabs: {
     display: 'flex',
@@ -282,7 +320,7 @@ const styles = {
   },
   tabBtn: (isActive: boolean) => ({
     flex: 1,
-    padding: '0.6rem',
+    padding: '0.55rem',
     border: 'none',
     borderRadius: '6px',
     background: isActive ? 'var(--bg-secondary)' : 'transparent',
@@ -294,9 +332,10 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '0.4rem',
-    transition: 'all 0.2s ease',
+    transition: 'all var(--transition-fast)',
     outline: 'none',
-    fontFamily: 'var(--font-secondary)'
+    fontFamily: 'var(--font-secondary)',
+    boxShadow: isActive ? 'var(--shadow-sm)' : 'none'
   }),
   form: {
     display: 'flex',
@@ -310,35 +349,46 @@ const styles = {
   },
   inputIcon: {
     position: 'absolute' as const,
-    left: '12px',
+    left: '14px',
     color: 'var(--text-muted)',
     pointerEvents: 'none' as const
   },
   input: {
-    paddingLeft: '38px'
+    paddingLeft: '40px'
   },
   submitBtn: {
     width: '100%',
     padding: '0.8rem',
-    marginTop: '0.5rem'
+    marginTop: '0.5rem',
+    borderRadius: 'var(--border-radius-sm)'
+  },
+  forgotBtn: {
+    background: 'none',
+    border: 'none',
+    color: 'hsl(var(--primary))',
+    fontSize: '0.75rem',
+    cursor: 'pointer',
+    fontFamily: 'var(--font-secondary)',
+    padding: 0,
+    transition: 'opacity var(--transition-fast)'
   },
   errorBanner: {
     backgroundColor: 'var(--danger-glow)',
     color: 'hsl(var(--danger))',
-    border: '1px solid rgba(239, 68, 68, 0.3)',
+    border: '1px solid rgba(239, 68, 68, 0.25)',
     borderRadius: 'var(--border-radius-sm)',
-    padding: '0.75rem',
-    fontSize: '0.82rem',
+    padding: '0.7rem',
+    fontSize: '0.8rem',
     fontWeight: 500,
     textAlign: 'center' as const
   },
   successBanner: {
     backgroundColor: 'var(--success-glow)',
     color: 'hsl(var(--success))',
-    border: '1px solid rgba(34, 197, 94, 0.3)',
+    border: '1px solid rgba(34, 197, 94, 0.25)',
     borderRadius: 'var(--border-radius-sm)',
-    padding: '0.75rem',
-    fontSize: '0.82rem',
+    padding: '0.7rem',
+    fontSize: '0.8rem',
     fontWeight: 500,
     textAlign: 'center' as const
   },
@@ -346,16 +396,16 @@ const styles = {
     fontSize: '0.72rem',
     color: 'var(--text-muted)',
     textAlign: 'center' as const,
-    lineHeight: 1.4,
+    lineHeight: 1.45,
     borderTop: '1px solid var(--card-border)',
-    paddingTop: '0.8rem'
+    paddingTop: '0.8rem',
+    marginTop: '0.25rem'
   },
   roleSelectionContainer: {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '0.4rem',
-    marginTop: '0.5rem',
-    marginBottom: '0.5rem'
+    marginTop: '0.25rem'
   },
   roleSelectionLabel: {
     fontSize: '0.75rem',
@@ -377,7 +427,7 @@ const styles = {
     border: isActive ? '1px solid hsl(var(--primary))' : '1px solid var(--card-border)',
     backgroundColor: isActive ? 'var(--primary-glow)' : 'var(--bg-tertiary)',
     color: isActive ? 'hsl(var(--primary))' : 'var(--text-secondary)',
-    transition: 'all 0.2s ease',
+    transition: 'all var(--transition-fast)',
     outline: 'none',
     fontFamily: 'var(--font-secondary)',
     textAlign: 'center' as const

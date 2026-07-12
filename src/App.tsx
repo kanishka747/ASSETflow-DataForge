@@ -3,6 +3,7 @@ import { AppProvider, useApp } from './context/AppContext';
 import { Sidebar } from './components/Sidebar';
 import { QuickSwitcher } from './components/QuickSwitcher';
 import { LoginSignup } from './views/LoginSignup';
+import { LandingPage } from './views/LandingPage';
 import { Dashboard } from './views/Dashboard';
 import { OrganizationSetup } from './views/OrganizationSetup';
 import { AssetRegistry } from './views/AssetRegistry';
@@ -16,6 +17,7 @@ import { ActivityLogs } from './views/ActivityLogs';
 const AppContent: React.FC = () => {
   const { currentUser } = useApp();
   const [currentView, setView] = useState<string>('dashboard');
+  const [showLogin, setShowLogin] = useState<boolean>(false);
 
   // Handle address bar hash changes
   useEffect(() => {
@@ -44,6 +46,7 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     if (!currentUser) {
       window.location.hash = '';
+      setShowLogin(false);
     } else if (window.location.hash === '') {
       window.location.hash = '#/dashboard';
     }
@@ -54,7 +57,10 @@ const AppContent: React.FC = () => {
   };
 
   if (!currentUser) {
-    return <LoginSignup />;
+    if (showLogin) {
+      return <LoginSignup onBack={() => setShowLogin(false)} />;
+    }
+    return <LandingPage onEnter={() => setShowLogin(true)} />;
   }
 
   // Render view depending on navigation selection
