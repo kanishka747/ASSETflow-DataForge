@@ -106,7 +106,7 @@ export const BubblesBackground: React.FC = () => {
             // Calculate force vector
             const force = (repulsionRadius - distance) / repulsionRadius;
             const angle = Math.atan2(dy, dx);
-            
+
             // Push velocity
             bubble.vx += Math.cos(angle) * force * repulsionForce;
             bubble.vy += Math.sin(angle) * force * repulsionForce;

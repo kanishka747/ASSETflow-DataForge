@@ -34,11 +34,11 @@ const AppContent: React.FC = () => {
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    
+
     if (currentUser) {
       handleHashChange();
     }
-    
+
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, [currentUser]);
 
@@ -93,7 +93,7 @@ const AppContent: React.FC = () => {
     <div className="app-container">
       {/* Sidebar navigation */}
       <Sidebar currentView={currentView} setView={handleSetView} />
-      
+
       {/* Primary viewport content */}
       <main className="main-content">
         {renderView()}

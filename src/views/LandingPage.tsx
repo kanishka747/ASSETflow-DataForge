@@ -25,28 +25,36 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
       title: 'Setup & Hierarchy',
       description: 'Configure departments, nested child organizations, and roles such as Admins, Managers, and Department Heads.',
       icon: Settings,
-      color: 'hsl(var(--primary))'
+      color: 'hsl(var(--primary))',
+      glow: 'var(--primary-glow)',
+      iconClass: 'step-icon-gear'
     },
     {
       number: '02',
       title: 'Register & Track',
       description: 'Log inventory categories, hardware serial numbers, and custom field templates. Generate physical QR codes for tagging.',
       icon: Package,
-      color: 'hsl(var(--purple))'
+      color: 'hsl(var(--purple))',
+      glow: 'var(--purple-glow)',
+      iconClass: 'step-icon-package'
     },
     {
       number: '03',
       title: 'Reserve Resources',
       description: 'Book shared rooms, lab equipment, or company vehicles. High-fidelity schedules prevent double-booking conflicts.',
       icon: CalendarDays,
-      color: 'hsl(var(--success))'
+      color: 'hsl(var(--success))',
+      glow: 'var(--success-glow)',
+      iconClass: 'step-icon-calendar'
     },
     {
       number: '04',
       title: 'Maintain & Audit',
       description: 'File maintenance tickets with priority levels, assign technicians, and run site-wide physical asset verification audits.',
       icon: Wrench,
-      color: 'hsl(var(--danger))'
+      color: 'hsl(var(--danger))',
+      glow: 'var(--danger-glow)',
+      iconClass: 'step-icon-wrench'
     }
   ];
 
@@ -90,7 +98,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
             A centralized platform to track physical assets, schedule conflict-free resource bookings, 
             route maintenance requests, and manage organizational audit cycles.
           </p>
-          <button onClick={onEnter} className="btn btn-primary" style={styles.ctaBtn}>
+          <button onClick={onEnter} className="btn btn-primary btn-pulse-glow" style={styles.ctaBtn}>
             Enter Platform <ArrowRight size={18} />
           </button>
         </section>
@@ -102,11 +110,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
           
           <div style={styles.stepsGrid}>
             {steps.map((step, idx) => (
-              <div key={idx} className="glass-panel" style={styles.stepCard}>
+              <div 
+                key={idx} 
+                className="landing-step-card"
+                style={{
+                  '--hover-color': step.color,
+                  '--hover-glow': step.glow
+                } as React.CSSProperties}
+              >
                 <div style={styles.stepCardHeader}>
                   <span style={{ ...styles.stepNumber, color: step.color }}>{step.number}</span>
-                  <div style={{ ...styles.stepIconWrapper, backgroundColor: `${step.color}15`, color: step.color }}>
-                    <step.icon size={22} />
+                  <div 
+                    className="step-icon-wrapper"
+                    style={{ backgroundColor: `${step.color}15`, color: step.color }}
+                  >
+                    <step.icon size={22} className={step.iconClass} />
                   </div>
                 </div>
                 <h3 style={styles.stepTitle}>{step.title}</h3>
